@@ -10,6 +10,13 @@ function week6_menu() {
         'title' => 'Week6'
     );
 
+    $items['week6a'] = array(
+        'page callback' => 'drupal_get_form',
+        'access callback' => TRUE,
+        'page arguments' => array('week6a_demo_form'),
+        'title' => 'Week6'
+    );
+
     return $items;
 
 }
@@ -17,7 +24,7 @@ function week6_menu() {
 function week6_demo_form($form, &$form_state) {
     $form = array();
     $form['fullname'] = array(
-        '#title' => t('What is your name'),
+        '#title' => t('What is your name?'),
         '#type' => 'textfield',
         '#required' => TRUE
     );
@@ -54,3 +61,37 @@ function week6_demo_form_submit($form, &$form_state) {
     drupal_set_message($txt);
 }
 
+
+
+
+
+function week6a_demo_form($form, &$form_state) {
+    $form = array();
+    $form['friendtwitter'] = array(
+        '#title' => t('What is the twitter handle of your friend'),
+        '#type' => 'textfield',
+        '#required' => TRUE
+    );
+    $form['msg'] = array(
+        '#type' =>'textfield',
+        '#title' => t('What Message do you want to tell them?'),
+        '#size' => 100,
+    );
+    $form['submit'] = array(
+        '#value' => 'submit',
+        '#type' => 'submit'
+    );
+
+    return $form;
+}
+
+function week6a_demo_form_validate($form, &$form_state) {
+    $msg = $form_state['values']['friendtwitter'] . ' ' . $form_state['values']['msg'];
+    if (strlen($msg) > 140) {
+        form_set_error('msg','Please keep your message under 140 characters');
+    }
+}
+function week6a_demo_form_submit($form, &$form_state) {
+    $msg = $form_state['values']['friendtwitter'] . ' ' . $form_state['values']['msg'];
+    si635_helper_tweet($msg);
+}
