@@ -1,0 +1,56 @@
+<?php
+
+
+function week6_menu() {
+    $items = array();
+    $items['week6'] = array(
+        'page callback' => 'drupal_get_form',
+        'access callback' => TRUE,
+        'page arguments' => array('week6_demo_form'),
+        'title' => 'Week6'
+    );
+
+    return $items;
+
+}
+
+function week6_demo_form($form, &$form_state) {
+    $form = array();
+    $form['fullname'] = array(
+        '#title' => t('What is your name'),
+        '#type' => 'textfield',
+        '#required' => TRUE
+    );
+    $form['age'] = array(
+        '#type' =>'textfield',
+        '#title' => t('What is your age?'),
+        '#size' => 5,
+    );
+    $form['submit'] = array(
+        '#value' => 'submit',
+        '#type' => 'submit'
+    );
+
+    return $form;
+}
+
+function week6_demo_form_validate($form, &$form_state) {
+
+    if ($form_state['values']['fullname'] != 'Michael') {
+        form_set_error('fullname', 'Please choose another name');
+    }
+    if (!is_numeric($form_state['values']['age'])) {
+        form_set_error('age','Please enter a valid age');
+    }
+
+}
+
+function week6_demo_form_submit($form, &$form_state) {
+    $txt = t("Your name is @name and your age is @age",array(
+        '@name' => $form_state['values']['fullname'],
+        '@age'  => $form_state['values']['age']
+    ));
+    si635_helper_tweet($txt);
+    drupal_set_message($txt);
+}
+
